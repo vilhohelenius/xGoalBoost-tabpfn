@@ -13,13 +13,16 @@ and compare **TabPFN-3.5 (Prior Labs cloud API)** against XGBoost and CatBoost.
 | MoneyPuck's own xGoal (reference) | – | 0.782 | – |
 | XGBoost | 50 000 | 0.789 | 0.2172 |
 | **TabPFN-3.5** | 50 000 | **0.794** | **0.2152** |
+| XGBoost | 100 000 | 0.797 | 0.2142 |
+| **TabPFN-3.5** | 100 000 | **0.8005** | **0.2128** |
 | XGBoost | ~240 000 | 0.802 | 0.2122 |
 | XGBoost, leave-one-season-out CV | 2 seasons per fold | 0.806 ± 0.004 | 0.209 |
 | CatBoost, leave-one-season-out CV | 2 seasons per fold | 0.805 ± 0.003 | 0.210 |
 
-Setup for the first three rows: train on seasons 2023–24, test on a random 30k-shot sample of 2025.
-On equal data TabPFN wins; the full-data XGBoost wins overall because TabPFN's context is limited, which suggests
-subsampling / ensembling TabPFN as a next step.
+Setup for the rows down to full-data XGBoost: train on seasons 2023–24, test on a random 30k-shot sample of 2025.
+On equal data TabPFN wins at both 50k and 100k rows, and the gap to full-data XGBoost (0.802, ~240k rows) shrinks from
+0.008 to 0.001 AUC as TabPFN gets more context. Full-data XGBoost is still marginally best on log loss and AUC;
+TabPFN's context size is the limit, so more training rows or ensembling several TabPFN fits is the natural next step.
 
 ## A leak we caught
 
