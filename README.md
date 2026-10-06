@@ -1,6 +1,6 @@
 # xGoalBoost × TabPFN-3.5: NHL expected goals
 
-**Hackathon category:** take on a hard problem (sports analytics).
+**Hackathon submission**
 
 Can a tabular foundation model predict whether an NHL shot becomes a goal as well as tuned gradient boosting?
 We model xG on ~365k shot attempts from [MoneyPuck](https://moneypuck.com/data.htm) (seasons 2023–26, 7.1 % goals)
