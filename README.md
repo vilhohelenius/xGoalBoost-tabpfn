@@ -52,3 +52,7 @@ TABPFN_TOKEN=<your key> .venv/bin/python scaling_experiment.py          # learni
 
 Get a TabPFN token at https://ux.priorlabs.ai/account. `compare_tabpfn.py` runs XGBoost before importing
 `tabpfn_client`, because the two crash with a segfault if loaded in the opposite order on macOS.
+
+## Demo: xG shot map
+
+`demo/index.html` is a self-contained interactive page (open it in a browser). Pick a shot type, situation (5v5, power play, short-handed, 3v3, empty net), rebound and rush, then click the rink to see the goal probability of a shot from that spot. The heat map is precomputed from an XGBoost model trained on seasons 2023-25. Rebuild with `python demo/build_demo.py` (needs the CSVs).
