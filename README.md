@@ -16,13 +16,21 @@ and compare **TabPFN-3.5 (Prior Labs cloud API)** against XGBoost and CatBoost.
 | XGBoost | 100 000 | 0.797 | 0.2142 |
 | **TabPFN-3.5** | 100 000 | **0.8005** | **0.2128** |
 | XGBoost | ~240 000 | 0.802 | 0.2122 |
+| **TabPFN-3.5 ensemble**, mean of 3 fits on different 100k samples | 3 × 100 000 | **0.8021** | **0.2121** |
 | XGBoost, leave-one-season-out CV | 2 seasons per fold | 0.806 ± 0.004 | 0.209 |
 | CatBoost, leave-one-season-out CV | 2 seasons per fold | 0.805 ± 0.003 | 0.210 |
 
 Setup for the rows down to full-data XGBoost: train on seasons 2023–24, test on a random 30k-shot sample of 2025.
 On equal data TabPFN wins at both 50k and 100k rows, and the gap to full-data XGBoost (0.802, ~240k rows) shrinks from
 0.008 to 0.001 AUC as TabPFN gets more context. Full-data XGBoost is still marginally best on log loss and AUC;
-TabPFN's context size is the limit, so more training rows or ensembling several TabPFN fits is the natural next step.
+TabPFN's context size is the limit. Averaging three TabPFN fits on different 100k samples gets to 0.8021 AUC / 0.2121
+log loss, level with or just above full-data XGBoost (0.8017 / 0.2122). That 0.0004 AUC difference is inside the noise of
+a 30k-shot test sample (~2 100 goals), so read it as "on par", not "better".
+
+![Learning curve](learning_curve.png)
+
+TabPFN is clearly ahead when data is scarce (10k rows: 0.781 vs 0.761 AUC); XGBoost closes the gap as rows grow.
+Raw numbers: `results.json`, produced by `scaling_experiment.py`.
 
 ## A leak we caught
 
@@ -39,6 +47,7 @@ uv venv --python 3.13 .venv && uv pip install --python .venv/bin/python -r requi
 # put shots_2023.csv, shots_2024.csv, shots_2025.csv, shots_2026.csv (from moneypuck.com/data.htm) in this folder
 .venv/bin/python train.py                       # XGBoost + CatBoost CV (~6 min)
 TABPFN_TOKEN=<your key> .venv/bin/python compare_tabpfn.py 50000 30000   # TabPFN vs XGBoost
+TABPFN_TOKEN=<your key> .venv/bin/python scaling_experiment.py          # learning curve + ensemble (~12 min)
 ```
 
 Get a TabPFN token at https://ux.priorlabs.ai/account. `compare_tabpfn.py` runs XGBoost before importing
